@@ -145,8 +145,8 @@
         //sort array so the sequence of choosing correct answers won't affect the outcome, the only thing that matters is to choose correct answers 
         //sorting only needed when we have more than one correct answer in our question for example: load 3 images and only by checking two of them we get the correct answer
         //in our case where there is only one correct answer it's not needed
-
-        let a = document.getElementById(id).alt;
+        if(block == false){
+            let a = document.getElementById(id).alt;
         checkedalt.push(a);
 
         altans.sort();
@@ -187,6 +187,8 @@
             }
         }
         checkedalt = [];
+        }
+        
     }
 
 
