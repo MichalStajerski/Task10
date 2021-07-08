@@ -39,6 +39,17 @@
             transform: scale(1.05); 
         }  
 
+        #myProgress {
+            width: 50%;
+            background-color: #ddd;
+            margin: auto;
+        }
+
+        #myBar {
+            width: 0%;
+            height: 30px;
+        background-color: #4CAF50;
+        }
     </style>
 <h1 style="text-align:center; color:white" >Zaznacz obrazki</h1>
 <br>
@@ -60,13 +71,16 @@
     </audio>
 </div>
 <div style="text-align: center;">
-    <!-- <button class="button" id="drawBtn" onclick="drawImgages(); drawSound()">Losuj obrazki</button> -->
-    <button class="button" id="myBtn" onclick="checkAnswers(); drawImgages(); drawSound() ">Zgłoś odpowiedzi</button>
+    <button class="button" id="myBtn" onclick="checkAnswers(); drawImgages(); drawSound();disableButton(this)">Zgłoś odpowiedzi</button>
     <!-- <button class="button" onclick="reset()">Resetuj ćwiczenie</button> -->
 </div>
 <div style="text-align: center;">
     <h3 style="color:white" >Poprawne odpowiedzi:  <span id="myText"></span></h3>
 </div>
+<div style="text-align: center;" id="myProgress">
+    <div id="myBar"></div>
+</div>
+<br>
 
 <script>
     var timesClicked = correctAnswers = 0;
@@ -78,11 +92,28 @@
     var audioTracks = ['Audio/Bee-noise.mp3','Audio/Large Black Bear Single Roar - QuickSounds.com.mp3','Audio/Dog-barking-multiple-sound-effect.mp3'];
     var checkedalt = [];
     var altans = [alt[answers[0]]];
-    var temp = [];
     var iterator = 0;
     var draw = false;
-    // track = 0;
     console.log(altans);
+
+
+
+    var increment = 0;
+    var i = 0;
+    function move() {
+        if(increment < 100){
+            increment += 25;
+            var elem = document.getElementById("myBar");
+            var width = elem.style.width = increment + "%";
+            var id = setInterval(frame,10);
+            function frame(){
+                if(increment>= 100){
+                 clearInterval(id);           
+                }
+            }
+        }
+    }
+
 
     //chcecking and unchecking images and adding answers to array or deleting them if are unchecked
     function mySelect(id){
@@ -107,6 +138,7 @@
 
     function checkAnswers(){
         iterator ++;
+        console.log("iterator "+ iterator);
          //sort array so the sequence of choosing correct answers won't affect the outcome, the only thing that matters is to choose correct answers
         checked.sort();
         altans.sort();
@@ -117,11 +149,13 @@
         }else{              
             if(JSON.stringify(altans)==JSON.stringify(checkedalt)){
             //marking correct answers in green after check
-            if(iterator == 10){
+            console.log("block "+ block);
+            if(iterator == 3){
                 block = true;
             }     
             for(let i = 0; i<checked.length;i++){
                 var goodAnswers = checked[i];
+                move();
                 //document.getElementById(goodAnswers).style.border = "7px solid green";
                 draw = true;
             } 
@@ -153,16 +187,19 @@
         }
         return this;
     };
+
     //resets our activity
     function reset(){
         window.location.reload();
     }
+
     //after submitting asnwers blocks button so the answers wont get changeed
     function disableButton(btn){
-        if(block==true){
+        if(block == true){
             document.getElementById(btn.id).disabled = true;
         }		
 	}
+
     function drawImgages(){
         console.log(false);
         if(draw != false){
@@ -206,6 +243,7 @@
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
 </script>
 </body>
 </html>
