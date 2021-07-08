@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <style>
+        body {
+        background-color: #373737;
+        }
+        * {
+          box-sizing: border-box;
+        }      
+        .column {
+          float: left;
+          width: 33.33%;
+          padding: 5px;
+        }
+        .row::after {
+          content: "";
+          clear: both;
+          display: table;
+        }
+        .button {
+            background-color: #04AA6D;
+            border: none;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            
+        }
+         
+        .button {border-radius: 12px;}
+
+        .zoom:hover {
+            -ms-transform: scale(0.5); 
+            -webkit-transform: scale(0.5); 
+            transform: scale(1.05); 
+        }  
+
+    </style>
+<h1 style="text-align:center; color:white" >Zaznacz obrazki</h1>
+<br>
+<div class="row">
+    <div class="column">
+      <img class="zoom" id="1" src="Images/0.jpg" alt="Bee" style="width:80%" onclick="mySelect(id);">
+    </div>
+    <div class="column">
+      <img class="zoom" id="2" src="Images/1.jpg" alt="Bear" style="width:80%" onclick="mySelect(id)">
+    </div>
+    <div class="column">
+      <img class="zoom" id="3" src="Images/2.jpg" alt="Dog" style="width:80%" onclick="mySelect(id)">
+    </div>
+  </div>
+<br>
+<div style="text-align: center;">
+    <audio id="video" controls preload='auto'>
+        <source src="Audio/Large Black Bear Single Roar - QuickSounds.com.mp3" type="audio/mp3">
+    </audio>
+</div>
+<div style="text-align: center;">
+    <button class="button" id="drawBtn" onclick="drawImgages(); drawSound()">Losuj obrazki</button>
+    <button class="button" id="myBtn" onclick="checkAnswers(); drawImgages(); drawSound() ">Zgłoś odpowiedzi</button>
+    <button class="button" onclick="reset()">Resetuj ćwiczenie</button>
+</div>
+<div style="text-align: center;">
+    <h3 style="color:white" >Poprawne odpowiedzi:  <span id="myText"></span></h3>
+</div>
+
+<script>
+    var timesClicked = correctAnswers = 0;
+    var answers = ["1"];
+    var block = false;
+    var checked = [];
+    var imgs = ['Images/0.jpg', 'Images/1.jpg', 'Images/2.jpg','Images/3.jpg','Images/4.jpg'];
+    var alt= ['Bee','Bear','Dog','Parrot','Fish'];
+    var audioTracks = ['Audio/Bee-noise.mp3','Audio/Large Black Bear Single Roar - QuickSounds.com.mp3','Audio/Dog-barking-multiple-sound-effect.mp3'];
+    var checkedalt = [];
+    var altans = [alt[answers[0]]];
+    var temp = [];
+    var iterator = 0;
+    // track = 0;
+    console.log(altans);
+
+    //chcecking and unchecking images and adding answers to array or deleting them if are unchecked
+    function mySelect(id){
+        if(block == false){
+            timesClicked++;
+            if(timesClicked%2==0){
+                document.getElementById(id).style.border = "none";
+                let a = document.getElementById(id).alt;
+                checked.remove(id);
+                checkedalt.remove(a);
+                console.log(checkedalt);
+            
+            }else{
+                document.getElementById(id).style.border = "7px solid blue";
+                let a = document.getElementById(id).alt;
+                checkedalt.push(a);
+                checked.push(id);
+                console.log(checkedalt);
+            }
+        }
+    } 
+
+    function checkAnswers(){
+        iterator ++;
+         //sort array so the sequence of choosing correct answers won't affect the outcome, the only thing that matters is to choose correct answers
+        checked.sort();
+        altans.sort();
+        checkedalt.sort();
+        if(checked.length == 0){
+            alert("nie wybrałeś żadnej odpowiedzi!");
+        }else{              
+            if(JSON.stringify(altans)==JSON.stringify(checkedalt)){
+            //marking correct answers in green after check
+            if(iterator == 10){
+                block = true;
+            }     
+            for(let i = 0; i<checked.length;i++){
+                var goodAnswers = checked[i];
+                document.getElementById(goodAnswers).style.border = "7px solid green";
+            } 
+            correctAnswers ++;
+            document.getElementById("myText").innerHTML = correctAnswers;
+            }else{
+                //marking wrong answers in red after check
+                for(let i = 0; i<checked.length;i++){
+                    var wrongAnswers = checked[i];
+                    document.getElementById(wrongAnswers).style.border = "7px solid red";                    
+                }
+                          
+                document.getElementById("myText").innerHTML = correctAnswers;
+            }
+            console.log(checked);
+        }
+        checkedalt = [];
+
+    }
+
+    //function that allows us to remove item from array checked by passed value 
+    Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+            while ((ax = this.indexOf(what)) !== -1) {
+                this.splice(ax, 1);
+            }
+        }
+        return this;
+    };
+    //resets our activity
+    function reset(){
+        window.location.reload();
+    }
+    //after submitting asnwers blocks button so the answers wont get changeed
+    function disableButton(btn){
+        if(block==true){
+            document.getElementById(btn.id).disabled = true;
+        }		
+	}
+    function drawImgages(){
+        for(let i = 1; i <imgs.length-1;i++){ 
+            var choose = getRandomIntInclusive(0,4);
+            document.getElementById(i).src = imgs[choose];  
+            document.getElementById(i).alt = alt[choose]; 
+        }
+
+        // for(let i = 1; i <imgs.length-2;i++){ 
+        //     var choose = getRandomIntInclusive(0,5);
+        //     temp.push(choose);
+        //     for(let j = 0; temp.length;j++ ){
+        //         if(temp[j]== choose){
+        //             temp.pop();
+        //             do{
+        //                 choose = getRandomIntInclusive(0,5)
+        //             }while(temp[j]==choose);
+        //         }
+        //     document.getElementById(i).src = imgs[choose];  
+        //     document.getElementById(i).alt = alt[choose]; 
+        //     }
+        //     console.log(temp)
+            
+        // }       
+    }
+
+
+
+    function drawSound(){        
+        var track = getRandomIntInclusive(0,2);
+        document.getElementById("video").src = audioTracks[track];
+
+        switch(track){
+            case 0: 
+                altans = [alt[track]];
+            break;
+            case 1: 
+                altans = [alt[track]];
+            break;
+            case 2: 
+                altans = [alt[track]];
+            break;
+        }
+    }
+    
+    // draws randomly a number between two values including them also
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+</script>
+</body>
+</html>
