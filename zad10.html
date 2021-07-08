@@ -97,7 +97,6 @@
     console.log(altans);
 
 
-
     var increment = 0;
     var i = 0;
     function move() {
@@ -138,9 +137,7 @@
 
     function checkAnswers(){
         iterator ++;
-        console.log("iterator "+ iterator);
-         //sort array so the sequence of choosing correct answers won't affect the outcome, the only thing that matters is to choose correct answers
-        checked.sort();
+        //sort array so the sequence of choosing correct answers won't affect the outcome, the only thing that matters is to choose correct answers
         altans.sort();
         checkedalt.sort();
         if(checked.length == 0){
@@ -150,7 +147,7 @@
             if(JSON.stringify(altans)==JSON.stringify(checkedalt)){
             //marking correct answers in green after check
             console.log("block "+ block);
-            if(iterator == 3){
+            if(iterator == 10){
                 block = true;
             }     
             for(let i = 0; i<checked.length;i++){
@@ -188,12 +185,7 @@
         return this;
     };
 
-    //resets our activity
-    function reset(){
-        window.location.reload();
-    }
-
-    //after submitting asnwers blocks button so the answers wont get changeed
+    //after sthe test is over blocks button 
     function disableButton(btn){
         if(block == true){
             document.getElementById(btn.id).disabled = true;
@@ -207,15 +199,26 @@
                 document.getElementById(checked[j]).style.border = "none";
                 checked = [];
             }
-            for(let i = 1; i <imgs.length;i++){ 
-                var choose = getRandomIntInclusive(0,3);
-                document.getElementById(i).src = imgs[choose];  
-                document.getElementById(i).alt = alt[choose]; 
+            //var temp = [];
+            //console.log(getRandomQuizPieces(3));
+            var temp = getRandomQuizPieces(3);
+            console.log(temp);
+            for(let i = 1; i <=temp.length;i++){              
+                document.getElementById(i).src = imgs[temp[i-1]];  
+                document.getElementById(i).alt = alt[temp[i- 1]]; 
+                //document.getElementById("video").src = audioTracks[i];
+                
             }
         }    
     }
-
-
+    //returns array of random nad not repeating images
+    function getRandomQuizPieces(qt){
+        let indexSet = new Set();
+        while(indexSet.size != qt){
+            indexSet.add(getRandomIntInclusive(0, imgs.length-1));
+        }
+        return Array.from(indexSet);
+    }
 
     function drawSound(){  
         if(draw != false){
