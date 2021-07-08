@@ -52,7 +52,7 @@
     <div class="column">
       <img class="zoom" id="3" src="Images/2.jpg" alt="Dog" style="width:80%" onclick="mySelect(id)">
     </div>
-  </div>
+</div>
 <br>
 <div style="text-align: center;">
     <audio id="video" controls preload='auto'>
@@ -60,9 +60,9 @@
     </audio>
 </div>
 <div style="text-align: center;">
-    <button class="button" id="drawBtn" onclick="drawImgages(); drawSound()">Losuj obrazki</button>
+    <!-- <button class="button" id="drawBtn" onclick="drawImgages(); drawSound()">Losuj obrazki</button> -->
     <button class="button" id="myBtn" onclick="checkAnswers(); drawImgages(); drawSound() ">Zgłoś odpowiedzi</button>
-    <button class="button" onclick="reset()">Resetuj ćwiczenie</button>
+    <!-- <button class="button" onclick="reset()">Resetuj ćwiczenie</button> -->
 </div>
 <div style="text-align: center;">
     <h3 style="color:white" >Poprawne odpowiedzi:  <span id="myText"></span></h3>
@@ -73,13 +73,14 @@
     var answers = ["1"];
     var block = false;
     var checked = [];
-    var imgs = ['Images/0.jpg', 'Images/1.jpg', 'Images/2.jpg','Images/3.jpg','Images/4.jpg'];
+    var imgs = ['Images/0.jpg', 'Images/1.jpg', 'Images/2.jpg','Images/3.jpg'];
     var alt= ['Bee','Bear','Dog','Parrot','Fish'];
     var audioTracks = ['Audio/Bee-noise.mp3','Audio/Large Black Bear Single Roar - QuickSounds.com.mp3','Audio/Dog-barking-multiple-sound-effect.mp3'];
     var checkedalt = [];
     var altans = [alt[answers[0]]];
     var temp = [];
     var iterator = 0;
+    var draw = false;
     // track = 0;
     console.log(altans);
 
@@ -112,6 +113,7 @@
         checkedalt.sort();
         if(checked.length == 0){
             alert("nie wybrałeś żadnej odpowiedzi!");
+            draw = false;
         }else{              
             if(JSON.stringify(altans)==JSON.stringify(checkedalt)){
             //marking correct answers in green after check
@@ -120,7 +122,8 @@
             }     
             for(let i = 0; i<checked.length;i++){
                 var goodAnswers = checked[i];
-                document.getElementById(goodAnswers).style.border = "7px solid green";
+                //document.getElementById(goodAnswers).style.border = "7px solid green";
+                draw = true;
             } 
             correctAnswers ++;
             document.getElementById("myText").innerHTML = correctAnswers;
@@ -132,8 +135,8 @@
                 }
                           
                 document.getElementById("myText").innerHTML = correctAnswers;
+                draw = false;
             }
-            console.log(checked);
         }
         checkedalt = [];
 
@@ -161,47 +164,40 @@
         }		
 	}
     function drawImgages(){
-        for(let i = 1; i <imgs.length-1;i++){ 
-            var choose = getRandomIntInclusive(0,4);
-            document.getElementById(i).src = imgs[choose];  
-            document.getElementById(i).alt = alt[choose]; 
-        }
-
-        // for(let i = 1; i <imgs.length-2;i++){ 
-        //     var choose = getRandomIntInclusive(0,5);
-        //     temp.push(choose);
-        //     for(let j = 0; temp.length;j++ ){
-        //         if(temp[j]== choose){
-        //             temp.pop();
-        //             do{
-        //                 choose = getRandomIntInclusive(0,5)
-        //             }while(temp[j]==choose);
-        //         }
-        //     document.getElementById(i).src = imgs[choose];  
-        //     document.getElementById(i).alt = alt[choose]; 
-        //     }
-        //     console.log(temp)
-            
-        // }       
+        console.log(false);
+        if(draw != false){
+            for( let j =0; j<checked.length;j++){
+                document.getElementById(checked[j]).style.border = "none";
+                checked = [];
+            }
+            for(let i = 1; i <imgs.length;i++){ 
+                var choose = getRandomIntInclusive(0,3);
+                document.getElementById(i).src = imgs[choose];  
+                document.getElementById(i).alt = alt[choose]; 
+            }
+        }    
     }
 
 
 
-    function drawSound(){        
-        var track = getRandomIntInclusive(0,2);
-        document.getElementById("video").src = audioTracks[track];
+    function drawSound(){  
+        if(draw != false){
+            var track = getRandomIntInclusive(0,2);
+            document.getElementById("video").src = audioTracks[track];
 
-        switch(track){
-            case 0: 
-                altans = [alt[track]];
-            break;
-            case 1: 
-                altans = [alt[track]];
-            break;
-            case 2: 
-                altans = [alt[track]];
-            break;
-        }
+            switch(track){
+                case 0: 
+                    altans = [alt[track]];
+                break;
+                case 1: 
+                    altans = [alt[track]];
+                break;
+                case 2: 
+                    altans = [alt[track]];
+                break;
+            }
+        }      
+
     }
     
     // draws randomly a number between two values including them also
