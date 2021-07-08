@@ -13,7 +13,7 @@
           width: 33.33%;
           padding: 5px;
         }
-        .row::after {
+        .row:after {
           content: "";
           clear: both;
           display: table;
@@ -36,7 +36,7 @@
         .zoom:hover {
             -ms-transform: scale(0.5); 
             -webkit-transform: scale(0.5); 
-            transform: scale(1.05); 
+            transform: scale(1.02); 
         }  
 
         #myProgress {
@@ -47,11 +47,11 @@
 
         #myBar {
             width: 0%;
-            height: 30px;
+            height: 25px;
         background-color: #4CAF50;
         }
     </style>
-<h1 style="text-align:center; color:white" >Zaznacz obrazki</h1>
+<h1 style="text-align:center; color:white" >Zaznacz poprawny obrazek</h1>
 <br>
 <div class="row">
     <div class="column">
@@ -66,13 +66,12 @@
 </div>
 <br>
 <div style="text-align: center;">
-    <audio id="video" controls preload='auto'>
+    <audio id="audio" controls preload='auto'>
         <source src="Audio/Large Black Bear Single Roar - QuickSounds.com.mp3" type="audio/mp3">
     </audio>
 </div>
 <div style="text-align: center;">
-    <button class="button" id="myBtn" onclick="checkAnswers(); drawImgagesAndSound(); disableButton(this)">Zgłoś odpowiedzi</button>
-    <!-- <button class="button" onclick="reset()">Resetuj ćwiczenie</button> -->
+    <button class="button" id="myBtn" onclick="checkAnswers(); drawImgagesAndSound(); disableButton(this)">Zgłoś odpowiedż</button>
 </div>
 <div style="text-align: center;">
     <h3 style="color:white" >Poprawne odpowiedzi:  <span id="myCorrectAnswers"></span></h3>
@@ -80,15 +79,14 @@
 <div style="text-align: center;" id="myProgress">
     <div id="myBar"></div>
 </div>
-<br>
 
-<script>
+<script type="text/javascript">
     var timesClicked = correctAnswers = 0;
     var answers = ["1"];
     var block = false;
     var checked = [];
     var imgs = ['Images/0.jpg', 'Images/1.jpg', 'Images/2.jpg','Images/3.jpg'];
-    var alt= ['Bee','Bear','Dog','Parrot','Fish'];
+    var alt= ['Bee','Bear','Dog','Parrot'];
     var audioTracks = ['Audio/Bee-noise.mp3','Audio/Large Black Bear Single Roar - QuickSounds.com.mp3','Audio/Dog-barking-multiple-sound-effect.mp3','Audio/Small Parrot Interior Constant Calls - QuickSounds.com.mp3'];
     var checkedalt = [];
     //altans is an array of alts for our images 
@@ -96,11 +94,10 @@
     var iterator = 0;
     var draw = false;
     console.log(altans);
-
-
     var increment = 0;
     var i = 0;
-    //
+    
+    //function to show increment in progress bar after correct answer
     function move() {
         if(increment < 100){
             increment += 10;
@@ -114,7 +111,6 @@
             }
         }
     }
-
 
     //chcecking and unchecking images and adding answers to array or deleting them if are unchecked
     function mySelect(id){
@@ -159,6 +155,8 @@
             for(let i = 0; i<checked.length;i++){
                 var goodAnswers = checked[i];
                 move();
+                //reset borders of images for new draw set
+                document.getElementById(goodAnswers).style.border = "none"; 
                 //draw only after good answer
                 draw = true;
             } 
@@ -166,10 +164,10 @@
             //display how many correct asnwers we currently have
             document.getElementById("myCorrectAnswers").innerHTML = correctAnswers;
             }else{
-                //marking wrong answers in red after check
+                //reseting vorders wor wrong answers after check in current draw after check
                 for(let i = 0; i<checked.length;i++){
                     var wrongAnswers = checked[i];
-                    document.getElementById(wrongAnswers).style.border = "7px solid red";                    
+                    document.getElementById(wrongAnswers).style.border = "none";                    
                 }
                           
                 document.getElementById("myCorrectAnswers").innerHTML = correctAnswers;
@@ -215,15 +213,11 @@
                 //writes new source and alt of images leaving the same id        
                 document.getElementById(i).src = imgs[temp[i-1]];  
                 document.getElementById(i).alt = alt[temp[i- 1]]; 
-                //draws one random audio matching one of the images that were drawn above
-                
-                
-                
-                
+                //draws one random audio matching one of the images that were drawn above              
             }
             var ab = temp[random];
             console.log(ab);
-            document.getElementById("video").src = audioTracks[ab];
+            document.getElementById("audio").src = audioTracks[ab];
             altans = [alt[ab]];
             
         }    
@@ -236,34 +230,12 @@
         }
         return Array.from(indexSet);
     }
-
-    // function drawSound(){  
-    //     if(draw != false){
-    //         var track = getRandomIntInclusive(0,2);
-    //         document.getElementById("video").src = audioTracks[track];
-
-    //         switch(track){
-    //             case 0: 
-    //                 altans = [alt[track]];
-    //             break;
-    //             case 1: 
-    //                 altans = [alt[track]];
-    //             break;
-    //             case 2: 
-    //                 altans = [alt[track]];
-    //             break;
-    //         }
-    //     }      
-
-    // }
-    
     // draws randomly a number between two values including them also
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-
 </script>
 </body>
 </html>
