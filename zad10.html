@@ -3,7 +3,7 @@
 <body>
     <style>
         body {
-        background-color: #373737;
+            background: linear-gradient(90deg, rgba(29,11,71,1) 17%, rgba(69,6,117,1) 40%, rgba(115,67,16,1) 70%);
         }
         * {
           box-sizing: border-box;
@@ -115,30 +115,33 @@
             }
         }
     }
+    window.onload = function() {
+    drawImgagesAndSound();
+};
 
     //chcecking and unchecking images and adding answers to array or deleting them if are unchecked
-    function mySelect(id){
-        if(block == false){
-            timesClicked++;
-            if(timesClicked%2==0){
-                document.getElementById(id).style.border = "none";
-                let a = document.getElementById(id).alt;
-                //delete our answer upon second click
-                checked.remove(id);
-                checkedalt.remove(a);
-                console.log(checkedalt);
+    // function mySelect(id){
+    //     if(block == false){
+    //         timesClicked++;
+    //         if(timesClicked%2==0){
+    //             document.getElementById(id).style.border = "none";
+    //             let a = document.getElementById(id).alt;
+    //             //delete our answer upon second click
+    //             checked.remove(id);
+    //             checkedalt.remove(a);
+    //             console.log(checkedalt);
             
-            }else{
-                document.getElementById(id).style.border = "7px solid blue";
-                let a = document.getElementById(id).alt;
-                //add our picked answer to arry
-                checkedalt.push(a);
-                checked.push(id);
-                console.log(checkedalt);
-            }
-            console.log(timesClicked);
-        }
-    } 
+    //         }else{
+    //             document.getElementById(id).style.border = "7px solid blue";
+    //             let a = document.getElementById(id).alt;
+    //             //add our picked answer to arry
+    //             checkedalt.push(a);
+    //             checked.push(id);
+    //             console.log(checkedalt);
+    //         }
+    //         console.log(timesClicked);
+    //     }
+    // } 
 
     function checkAnswers(id){
         iterator ++;
@@ -162,6 +165,7 @@
             for(let i = 0; i<checkedalt.length;i++){
                 var goodAnswers = checkedalt[i];
                 move();
+                //code below not needed with current way of marking answers can change if we want to border answer and then reset
                 //reset borders of images for new draw set
                 //document.getElementById(goodAnswers).style.border = "none"; 
                 //draw only after good answer
