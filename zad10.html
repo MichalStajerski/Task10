@@ -41,12 +41,12 @@
     var alt= ['Bee','Bear','Dog','Parrot'];
     var audioTracks = ['Audio/Bee-noise.mp3','Audio/Large Black Bear Single Roar - QuickSounds.com.mp3','Audio/Dog-barking-multiple-sound-effect.mp3','Audio/Small Parrot Interior Constant Calls - QuickSounds.com.mp3'];
     var checkedalt = [];
-    //altans is an array of alts for our images 
-    var altans = [alt[answers[0]]];
+    //altanswers is an array of alts for our images 
+    var altanswers = [alt[answers[0]]];
     var test = [];
     var iterator = 0;
     var draw = false;
-    console.log(altans);
+    console.log(altanswers);
     var increment = 0;
     var i = 0;
     
@@ -102,13 +102,13 @@
             let a = document.getElementById(id).alt;
         checkedalt.push(a);
 
-        altans.sort();
+        altanswers.sort();
         checkedalt.sort();
         if(checkedalt.length == 0){
             alert("nie wybrałeś żadnej odpowiedzi!");
             draw = false;
         }else{              
-            if(JSON.stringify(altans)==JSON.stringify(checkedalt)){
+            if(JSON.stringify(altanswers)==JSON.stringify(checkedalt)){
             console.log("block "+ block);
             //block our submit asnwer button after 10 questions
     
@@ -184,7 +184,7 @@
             var ab = temp[random];
             console.log(ab);
             document.getElementById("audio").src = audioTracks[ab];
-            altans = [alt[ab]];
+            altanswers = [alt[ab]];
             
         }    
     }
